@@ -1,0 +1,295 @@
+<div class="room-layout" *ngIf="!showNameDialog && !roomClosed">
+  <div class="users-sidebar">
+    <mat-card class="users-card">
+      <mat-card-header>
+        <mat-card-title>Participants</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="user-list">
+                    <div class="user-item" 
+               *ngFor="let user of users" 
+               [hidden]="user.isAdmin"
+               [class.disconnected]="user.connected === false">
+            <div class="user-info">
+              <span class="user-name">
+                {{ user.name }}
+                <span class="admin-badge" *ngIf="user.isAdmin">👑</span>
+                <span class="disconnected-badge" *ngIf="user.connected === false">🔌</span>
+              </span>
+              <div class="user-estimate-status">
+                <span class="user-estimate" *ngIf="(resultsRevealed || user.isAdmin) && user.hasVoted && user.estimate">
+                  <span *ngIf="isNumber(user.estimate)">{{ user.estimate }}</span>
+                  <span *ngIf="user.estimate === 'info'">❓</span>
+                  <span *ngIf="user.estimate === 'split'">✂️</span>
+                </span>
+                <span class="user-status" 
+                      [class.voted]="user.hasVoted" 
+                      [class.not-voted]="!user.hasVoted"
+                      [class.disconnected]="user.connected === false">
+                  <span *ngIf="user.connected === false">🔌</span>
+                  <span *ngIf="user.connected !== false">{{ user.hasVoted ? '✓' : '⏳' }}</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="main-content">
+    <div class="room-header">
+      <div class="header-card">
+        <div class="header-content">
+          <div class="header-top">
+            <div class="story-context-header" *ngIf="currentUser?.isAdmin">
+              <div class="story-inline">
+                <span *ngIf="!isEditingStory" class="story-display" (click)="editStory()">
+                  <span *ngIf="storySummary" class="story-text">{{ storySummary }}</span>
+                  <span *ngIf="!storySummary" class="story-empty">Click to add story...</span>
+                </span>
+                
+                <div *ngIf="isEditingStory" class="story-edit-inline">
+                  <mat-form-field appearance="outline" class="story-input">
+                    <input matInput 
+                           placeholder="Enter story summary"
+                           [(ngModel)]="storySummary"
+                           (keyup.enter)="saveStory()"
+                           (keyup.escape)="cancelEditStory()"
+                           #storyInput>
+                  </mat-form-field>
+                  
+                  <button mat-icon-button color="primary" (click)="saveStory()" matTooltip="Save story">
+                    <mat-icon>check</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="cancelEditStory()" matTooltip="Cancel editing">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+                
+                <button mat-icon-button (click)="editStory()" *ngIf="!isEditingStory" class="edit-story-btn" matTooltip="Edit story">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button mat-icon-button color="accent" (click)="copyRoomUrl()" matTooltip="Copy Room URL">
+            <mat-icon>{{ urlCopied ? 'check' : 'content_copy' }}</mat-icon>
+          </button>
+          
+          <ng-container *ngIf="currentUser?.isAdmin">
+            <button mat-icon-button 
+                    color="primary" 
+                    (click)="startEstimation()"
+                    *ngIf="!estimationStarted"
+                    matTooltip="Start Estimating">
+              <mat-icon>play_arrow</mat-icon>
+            </button>
+            
+            <button mat-raised-button 
+                    color="primary" 
+                    (click)="revealResults()"
+                    *ngIf="estimationStarted && !resultsRevealed"
+                    [disabled]="!allUsersVoted">
+              �️ View Results ({{ votingProgress }})
+            </button>
+            
+            <button mat-raised-button 
+                    color="primary" 
+                    (click)="resetAndStartEstimation()"
+                    *ngIf="estimationStarted && resultsRevealed"
+                    matTooltip="Reset and start new estimation">
+              🔄 Estimate Again
+            </button>
+            
+            <button mat-icon-button 
+                    color="warn" 
+                    (click)="closeRoom()"
+                    matTooltip="Close Room">
+              <mat-icon>close</mat-icon>
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="voting-area">
+      <div *ngIf="currentUser?.isAdmin" class="admin-view">
+        <div *ngIf="!estimationStarted" class="waiting-state">
+          <h2>Ready to Start Planning Poker</h2>
+          <p>Click "Start Estimating" when your team is ready to begin voting on the current story.</p>
+        </div>
+        
+        <div *ngIf="estimationStarted && !resultsRevealed" class="voting-in-progress">
+          <h2>Voting in progress...</h2>
+          <p>Team members are selecting their estimates. Progress: {{ votingProgress }}</p>
+          <div class="voting-status">
+            <p *ngIf="!allUsersVoted">⏳ Waiting for all team members to vote</p>
+            <p *ngIf="allUsersVoted">✅ All votes are in! Click "View Results" to reveal estimates</p>
+          </div>
+        </div>
+        
+        <div *ngIf="estimationStarted && resultsRevealed" class="results-view">
+          <div class="chart-container">
+            <div class="custom-chart">
+              <div class="chart-content">
+                <div class="chart-svg-container">
+                  <svg viewBox="0 0 350 350" class="pie-chart-svg">
+                    <!-- Chart segments -->
+                    <g *ngFor="let segment of chartSegments; let i = index">
+                      <path 
+                        [attr.d]="segment.pathData"
+                        [attr.fill]="segment.color"
+                        stroke="#303030"
+                        stroke-width="2"
+                        class="chart-segment">
+                      </path>
+                    </g>
+                    
+                    <!-- Show message if no chart segments -->
+                    <text *ngIf="chartSegments.length === 0" 
+                          x="175" y="175" 
+                          text-anchor="middle" 
+                          fill="#666" 
+                          font-size="16">
+                      No voting data
+                    </text>
+                  </svg>
+                </div>
+                
+                <!-- Legend -->
+                <div class="chart-legend">
+                  <div class="legend-item" *ngFor="let segment of chartSegments">
+                    <div class="legend-color" [style.background-color]="segment.color"></div>
+                    <span class="legend-label">{{ segment.label }}</span>
+                    <span class="legend-value">{{ segment.value }} vote{{ segment.value !== 1 ? 's' : '' }} ({{ segment.percentage.toFixed(1) }}%)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="!currentUser?.isAdmin" class="participant-view">
+        <div *ngIf="!estimationStarted" class="waiting-state">
+          <h2>Waiting for admin to start</h2>
+          <p>The room admin will start the estimation when everyone is ready.</p>
+        </div>
+        
+        <div *ngIf="estimationStarted && !resultsRevealed" class="voting-active">
+          <h2>Select your estimate:</h2>
+          <div class="card-deck">
+            <div 
+              class="story-card" 
+              *ngFor="let point of storyPoints"
+              [class.selected]="selectedEstimate === point"
+              (click)="selectEstimate(point)">
+              <span class="card-value">{{ point }}</span>
+            </div>
+          </div>
+          
+          <div class="special-cards">
+            <div 
+              class="story-card special-card" 
+              *ngFor="let option of specialOptions"
+              [class.selected]="selectedEstimate === option.value"
+              (click)="selectEstimate(option.value)">
+              <span class="card-value special">{{ option.shortLabel }}</span>
+              <span class="card-label">{{ option.label.split(' ').slice(1).join(' ') }}</span>
+            </div>
+          </div>
+          
+          <div class="current-selection" *ngIf="selectedEstimate">
+            <p>Your estimate: <strong>
+              <span *ngIf="isNumber(selectedEstimate)">{{ selectedEstimate }}</span>
+              <span *ngIf="selectedEstimate === 'info'">❓ Need More Info</span>
+              <span *ngIf="selectedEstimate === 'split'">✂️ Story Too Big</span>
+            </strong></p>
+          </div>
+          
+          <div class="voting-status-participant">
+            <p *ngIf="selectedEstimate">✅ Your vote has been submitted</p>
+            <p *ngIf="!selectedEstimate">🤔 Please select your estimate</p>
+          </div>
+        </div>
+        
+        <div *ngIf="estimationStarted && resultsRevealed" class="results-revealed">
+          <h2>Results Revealed</h2>
+          <p>The admin has revealed all estimates. Check the results above.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="error-layout" *ngIf="roomClosed">
+  <div class="error-content">
+    <mat-card class="error-card">
+      <mat-card-header>
+        <mat-card-title>🚪 Room Closed</mat-card-title>
+        <mat-card-subtitle>This planning poker room has been closed by the admin</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>The admin has ended this planning poker session. All estimation data has been cleared.</p>
+        <p>You can create a new room or join a different active session.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/">
+          🏠 Go Home
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<div class="name-dialog-overlay" *ngIf="showNameDialog">
+  <div class="name-dialog">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Join Planning Poker Room</mat-card-title>
+        <mat-card-subtitle>Room ID: {{ roomId }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Your Name</mat-label>
+          <input matInput 
+                 placeholder="Enter your name" 
+                 [(ngModel)]="userName"
+                 (keyup.enter)="joinRoom()">
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button 
+                color="primary" 
+                (click)="joinRoom()"
+                [disabled]="!userName.trim()">
+          Join room
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<div class="name-dialog-overlay" *ngIf="roomClosed">
+  <div class="name-dialog">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Room not found</mat-card-title>
+        <mat-card-subtitle>Room ID: {{ roomId }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>This room doesn't exist or has been closed.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button 
+                color="primary" 
+                routerLink="/">
+          Go Home
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
