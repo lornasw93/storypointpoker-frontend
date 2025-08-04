@@ -1,8 +1,59 @@
+// Variables for consistency and easier maintenance
+$primary-color: #9c27b0;
+$secondary-color: #ff9800;
+$success-color: #4caf50;
+$warning-color: #ff9800;
+$error-color: #f44336;
+$gold-color: #ffd700;
+
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+$spacing-xs: 5px;
+$spacing-sm: 8px;
+$spacing-md: 10px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+
+$overlay-bg: rgba(255, 255, 255, 0.05);
+$overlay-bg-hover: rgba(255, 255, 255, 0.08);
+$border-subtle: rgba(255, 255, 255, 0.1);
+$text-primary: rgba(255, 255, 255, 0.87);
+$text-secondary: rgba(255, 255, 255, 0.6);
+$text-disabled: rgba(255, 255, 255, 0.5);
+
+// Mixins for common patterns
+@mixin card-base {
+  background-color: $overlay-bg;
+  border-radius: $border-radius-md;
+  border: 1px solid $border-subtle;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin hover-lift {
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+@mixin text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .room-layout {
   display: flex;
   height: 100vh;
-  gap: 20px;
-  padding: 20px;
+  gap: $spacing-xl;
+  padding: $spacing-xl;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -28,13 +79,12 @@
 .user-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: $spacing-md;
 }
 
 .user-item {
-  padding: 10px;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.05);
+  padding: $spacing-md;
+  @include card-base;
   
   &.disconnected {
     opacity: 0.6;
@@ -51,13 +101,13 @@
 .user-estimate-status {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: $spacing-sm;
 }
 
 .user-estimate {
-  background-color: rgba(156, 39, 176, 0.2);
+  background-color: rgba($primary-color, 0.2);
   padding: 2px 6px;
-  border-radius: 8px;
+  border-radius: $border-radius-md;
   font-size: 12px;
   font-weight: bold;
   min-width: 20px;
@@ -68,7 +118,7 @@
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: $spacing-xs;
 }
 
 .admin-badge {
@@ -78,28 +128,28 @@
 .disconnected-badge {
   font-size: 12px;
   opacity: 0.7;
-  margin-left: 5px;
+  margin-left: $spacing-xs;
 }
 
 .admin-text {
-  color: #ffd700;
+  color: $gold-color;
   font-weight: bold;
-  margin-left: 5px;
+  margin-left: $spacing-xs;
 }
 
 .user-status {
-  padding: 4px 8px;
-  border-radius: 12px;
+  padding: 4px $spacing-sm;
+  border-radius: $border-radius-lg;
   font-size: 12px;
   font-weight: bold;
   
   &.voted {
-    background-color: #4caf50;
+    background-color: $success-color;
     color: white;
   }
   
   &.not-voted {
-    background-color: #ff9800;
+    background-color: $warning-color;
     color: white;
   }
   
@@ -114,20 +164,18 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: $spacing-xl;
 }
 
 .header-card {
   flex-shrink: 0;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  @include card-base;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
-  gap: 16px;
+  padding: $spacing-lg;
+  gap: $spacing-lg;
 }
 
 .header-content {
@@ -138,7 +186,7 @@
 
 .header-actions {
   display: flex;
-  gap: 10px;
+  gap: $spacing-md;
   flex-shrink: 0;
   margin-left: auto;
 }
@@ -160,13 +208,13 @@
 .story-inline {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: $spacing-sm;
   height: 40px; // Fixed height to prevent jitter
 }
 
 .story-label {
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.87);
+  color: $text-primary;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -175,36 +223,33 @@
   flex: 1;
   min-width: 0;
   cursor: pointer;
-  padding: 6px 12px;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px $spacing-lg;
+  border-radius: $border-radius-sm;
+  @include card-base;
   transition: background-color 0.2s ease;
   height: 38px; // Fixed height to match input
   display: flex;
   align-items: center;
   
   &:hover {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: $overlay-bg-hover;
   }
 }
 
 .story-text {
-  color: rgba(255, 255, 255, 0.87);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: $text-primary;
+  @include text-ellipsis;
 }
 
 .story-empty {
-  color: rgba(255, 255, 255, 0.5);
+  color: $text-disabled;
   font-style: italic;
 }
 
 .story-edit-inline {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: $spacing-sm;
   flex: 1;
   min-width: 0;
 }
@@ -227,7 +272,7 @@
   
   ::ng-deep input {
     height: 38px;
-    padding: 6px 12px;
+    padding: 6px $spacing-lg;
     box-sizing: border-box;
   }
 }
@@ -236,9 +281,7 @@
   width: 40px;
   height: 40px;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   
   mat-icon {
     font-size: 18px;
@@ -296,6 +339,7 @@
   }
 }
 
+// Voting area
 .voting-area {
   flex: 1;
   display: flex;
@@ -306,7 +350,7 @@
   min-height: 0;
   
   h2 {
-    margin: 0 0 20px 0;
+    margin: 0 0 $spacing-xl 0;
     text-align: center;
   }
 }
@@ -321,7 +365,7 @@
 }
 
 .waiting-state, .voting-in-progress, .voting-active, .results-revealed {
-  padding: 20px;
+  padding: $spacing-xl;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -337,25 +381,132 @@
 }
 
 .voting-status, .voting-status-participant {
-  margin-top: 20px;
+  margin-top: $spacing-xl;
   
   p {
     font-size: 16px;
-    margin: 10px 0;
+    margin: $spacing-md 0;
   }
 }
 
+// Card styles
+.card-deck {
+  display: flex;
+  gap: $spacing-xl;
+  margin-bottom: 30px;
+}
+
+.special-cards {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.story-card {
+  width: 80px;
+  height: 120px;
+  border: 2px solid $primary-color;
+  border-radius: $border-radius-lg;
+  @include flex-center;
+  cursor: pointer;
+  @include hover-lift;
+  background-color: rgba($primary-color, 0.1);
+  position: relative;
+  
+  &:hover {
+    background-color: rgba($primary-color, 0.2);
+    box-shadow: 0 8px 16px rgba($primary-color, 0.3);
+  }
+  
+  &.selected {
+    background-color: $primary-color;
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba($primary-color, 0.5);
+    
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      
+      &::after {
+        content: "Click to deselect";
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 10px;
+        color: $text-secondary;
+        white-space: nowrap;
+      }
+    }
+  }
+  
+  &.special-card {
+    width: 100px;
+    height: 120px;
+    border-color: $secondary-color;
+    background-color: rgba($secondary-color, 0.1);
+    flex-direction: column;
+    padding: $spacing-sm;
+    
+    &:hover {
+      background-color: rgba($secondary-color, 0.2);
+      box-shadow: 0 8px 16px rgba($secondary-color, 0.3);
+    }
+    
+    &.selected {
+      background-color: $secondary-color;
+      border-color: $secondary-color;
+      box-shadow: 0 8px 16px rgba($secondary-color, 0.5);
+      
+      &:hover {
+        background-color: darken($secondary-color, 10%);
+      }
+    }
+  }
+}
+
+.card-value {
+  font-size: 28px;
+  font-weight: bold;
+  
+  &.special {
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+}
+
+.card-label {
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.current-selection {
+  text-align: center;
+  
+  p {
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  strong {
+    color: $primary-color;
+  }
+}
+
+// Chart styles
 .results-summary {
   display: flex;
   flex-direction: column;
   gap: 15px;
   max-width: 500px;
-  margin: 20px auto 0;
+  margin: $spacing-xl auto 0;
   
   h3 {
     text-align: center;
     margin-bottom: 15px;
-    color: rgba(255, 255, 255, 0.87);
+    color: $text-primary;
   }
 }
 
@@ -365,9 +516,7 @@
   height: 100%;
   margin: 0 auto;
   padding: 0;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  @include card-base;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -377,10 +526,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: $spacing-xl;
   height: 100%;
   flex: 1;
-  padding: 20px;
+  padding: $spacing-xl;
 }
 
 .chart-content {
@@ -403,9 +552,7 @@
 
 .chart-svg-container {
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   min-width: 0;
   flex: 1;
   
@@ -445,7 +592,7 @@
 .chart-legend {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: $spacing-lg;
   min-width: 200px;
   max-width: 350px;
   flex: 1;
@@ -455,16 +602,14 @@
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: $spacing-lg;
+  padding: $spacing-md $spacing-lg;
+  @include card-base;
   transition: background-color 0.2s ease;
   font-size: 15px;
   
   &:hover {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: $overlay-bg-hover;
   }
 }
 
@@ -472,7 +617,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid $border-subtle;
   flex-shrink: 0;
 }
 
@@ -480,13 +625,13 @@
   flex: 1;
   text-align: left;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.87);
+  color: $text-primary;
   font-size: 15px;
 }
 
 .legend-value {
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.6);
+  color: $text-secondary;
   font-weight: 400;
 }
 
@@ -494,14 +639,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  border-left: 4px solid #9c27b0;
+  padding: 15px $spacing-xl;
+  @include card-base;
+  border-left: 4px solid $primary-color;
   
   &.admin-result {
-    border-left-color: #ffd700;
-    background-color: rgba(255, 215, 0, 0.1);
+    border-left-color: $gold-color;
+    background-color: rgba($gold-color, 0.1);
   }
 }
 
@@ -511,8 +655,8 @@
 }
 
 .result-estimate {
-  padding: 8px 12px;
-  background-color: #9c27b0;
+  padding: $spacing-sm $spacing-lg;
+  background-color: $primary-color;
   color: white;
   border-radius: 6px;
   font-weight: bold;
@@ -520,117 +664,56 @@
   text-align: center;
   
   &.no-vote {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.6);
+    background-color: $overlay-bg;
+    color: $text-secondary;
     font-style: italic;
   }
 }
 
-.card-deck {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
+// Error state styles
+.error-layout {
+  height: 100vh;
+  @include flex-center;
+  padding: $spacing-xl;
+  box-sizing: border-box;
 }
 
-.special-cards {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 30px;
+.error-content {
+  max-width: 500px;
+  width: 100%;
 }
 
-.story-card {
-  width: 80px;
-  height: 120px;
-  border: 2px solid #9c27b0;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: rgba(156, 39, 176, 0.1);
-  position: relative;
-  
-  &:hover {
-    background-color: rgba(156, 39, 176, 0.2);
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(156, 39, 176, 0.3);
-  }
-  
-  &.selected {
-    background-color: #9c27b0;
-    color: white;
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(156, 39, 176, 0.5);
-    
-    &:hover {
-      background-color: #7b1fa2;
-      
-      &::after {
-        content: "Click to deselect";
-        position: absolute;
-        bottom: -25px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 10px;
-        color: rgba(255, 255, 255, 0.7);
-        white-space: nowrap;
-      }
-    }
-  }
-  
-  &.special-card {
-    width: 100px;
-    height: 120px;
-    border-color: #ff9800;
-    background-color: rgba(255, 152, 0, 0.1);
-    flex-direction: column;
-    padding: 8px;
-    
-    &:hover {
-      background-color: rgba(255, 152, 0, 0.2);
-      box-shadow: 0 8px 16px rgba(255, 152, 0, 0.3);
-    }
-    
-    &.selected {
-      background-color: #ff9800;
-      border-color: #ff9800;
-      box-shadow: 0 8px 16px rgba(255, 152, 0, 0.5);
-      
-      &:hover {
-        background-color: #f57c00;
-      }
-    }
-  }
-}
-
-.card-value {
-  font-size: 28px;
-  font-weight: bold;
-  
-  &.special {
-    font-size: 24px;
-    margin-bottom: 4px;
-  }
-}
-
-.card-label {
-  font-size: 11px;
-  text-align: center;
-  line-height: 1.2;
-  font-weight: 500;
-}
-
-.current-selection {
+.error-card {
   text-align: center;
   
-  p {
-    font-size: 18px;
-    margin: 0;
+  mat-card-header {
+    text-align: center;
+    padding-bottom: $spacing-lg;
   }
   
-  strong {
-    color: #9c27b0;
+  mat-card-title {
+    font-size: 1.5rem;
+    margin-bottom: $spacing-sm;
+  }
+  
+  mat-card-subtitle {
+    color: $text-secondary;
+  }
+  
+  mat-card-content {
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    
+    p {
+      margin: $spacing-lg 0;
+    }
+  }
+  
+  mat-card-actions {
+    display: flex;
+    gap: $spacing-lg;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }
 
@@ -642,9 +725,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   z-index: 1000;
 }
 
@@ -684,7 +765,7 @@
   
   .header-top {
     min-height: 50px; // Slightly smaller on mobile
-    padding: 0 10px; // Add some padding on mobile
+    padding: 0 $spacing-md; // Add some padding on mobile
   }
   
   .story-context-header {

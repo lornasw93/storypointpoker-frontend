@@ -16,9 +16,8 @@ export class HomeComponent {
   ) { }
 
   createRoom() {
-    // Use a default admin name for quick room creation
     const adminName = 'Room Admin';
-    const roomName = 'Planning Poker Room';
+    const roomName = 'Story Point Poker Room';
 
     this.roomService.createRoom(roomName, adminName).subscribe({
       next: (response) => {
@@ -29,7 +28,6 @@ export class HomeComponent {
             isAdmin: true
           }));
 
-          // Navigate to the room page (no admin parameter needed)
           this.router.navigate([response.data.roomId]);
         }
       },
