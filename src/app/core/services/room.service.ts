@@ -51,6 +51,7 @@ export interface ApiResponse<T = any> {
 })
 export class RoomService {
   private readonly baseUrl = 'https://storypointpoker-backend-production.up.railway.app/api';
+  //private readonly baseUrl = 'http://localhost:3000/api';
   private socket: any;
   
   // Reactive state management
@@ -74,6 +75,10 @@ export class RoomService {
     this.socket = io('https://storypointpoker-backend-production.up.railway.app', {
       transports: ['websocket', 'polling']
     });
+
+    // this.socket = io('http://localhost:3000', {
+    //   transports: ['websocket', 'polling']
+    // });
 
     // Socket event listeners
     this.socket.on('room-state', (data: { room: Room; users: User[]; results: VotingResults }) => {
