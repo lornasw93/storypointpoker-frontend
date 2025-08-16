@@ -38,6 +38,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
 
 @mixin hover-lift {
   transition: all 0.3s ease;
+
   &:hover {
     transform: translateY(-5px);
   }
@@ -69,7 +70,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   height: 100%;
   display: flex;
   flex-direction: column;
-  
+
   mat-card-content {
     flex: 1;
     overflow-y: auto;
@@ -85,7 +86,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
 .user-item {
   padding: $spacing-md;
   @include card-base;
-  
+
   &.disconnected {
     opacity: 0.6;
     background-color: rgba(255, 255, 255, 0.02);
@@ -142,17 +143,17 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   border-radius: $border-radius-lg;
   font-size: 12px;
   font-weight: bold;
-  
+
   &.voted {
     background-color: $success-color;
     color: white;
   }
-  
+
   &.not-voted {
     background-color: $warning-color;
     color: white;
   }
-  
+
   &.disconnected {
     background-color: #757575;
     color: white;
@@ -230,7 +231,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   height: 38px; // Fixed height to match input
   display: flex;
   align-items: center;
-  
+
   &:hover {
     background-color: $overlay-bg-hover;
   }
@@ -257,19 +258,19 @@ $text-disabled: rgba(255, 255, 255, 0.5);
 .story-input {
   flex: 1;
   min-width: 0;
-  
+
   ::ng-deep .mat-mdc-form-field-wrapper {
     padding-bottom: 0;
   }
-  
+
   ::ng-deep .mat-mdc-form-field-subscript-wrapper {
     display: none;
   }
-  
+
   ::ng-deep .mat-mdc-text-field-wrapper {
     height: 38px;
   }
-  
+
   ::ng-deep input {
     height: 38px;
     padding: 6px $spacing-lg;
@@ -282,7 +283,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   height: 40px;
   flex-shrink: 0;
   @include flex-center;
-  
+
   mat-icon {
     font-size: 18px;
     width: 18px;
@@ -307,30 +308,30 @@ $text-disabled: rgba(255, 255, 255, 0.5);
 
 .error-card {
   text-align: center;
-  
+
   mat-card-header {
     text-align: center;
     padding-bottom: 16px;
   }
-  
+
   mat-card-title {
     font-size: 1.5rem;
     margin-bottom: 8px;
   }
-  
+
   mat-card-subtitle {
     color: rgba(255, 255, 255, 0.7);
   }
-  
+
   mat-card-content {
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.8);
-    
+
     p {
       margin: 12px 0;
     }
   }
-  
+
   mat-card-actions {
     display: flex;
     gap: 12px;
@@ -348,14 +349,15 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   justify-content: center;
   overflow-y: auto;
   min-height: 0;
-  
+
   h2 {
     margin: 0 0 $spacing-xl 0;
     text-align: center;
   }
 }
 
-.admin-view, .participant-view {
+.admin-view,
+.participant-view {
   width: 100%;
   text-align: center;
   height: 100%;
@@ -364,7 +366,10 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   justify-content: center;
 }
 
-.waiting-state, .voting-in-progress, .voting-active, .results-revealed {
+.waiting-state,
+.voting-in-progress,
+.voting-active,
+.results-revealed {
   padding: $spacing-xl;
   flex: 1;
   display: flex;
@@ -380,9 +385,10 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   justify-content: center;
 }
 
-.voting-status, .voting-status-participant {
+.voting-status,
+.voting-status-participant {
   margin-top: $spacing-xl;
-  
+
   p {
     font-size: 16px;
     margin: $spacing-md 0;
@@ -412,21 +418,21 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   @include hover-lift;
   background-color: rgba($primary-color, 0.1);
   position: relative;
-  
+
   &:hover {
     background-color: rgba($primary-color, 0.2);
     box-shadow: 0 8px 16px rgba($primary-color, 0.3);
   }
-  
+
   &.selected {
     background-color: $primary-color;
     color: white;
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba($primary-color, 0.5);
-    
+
     &:hover {
       background-color: darken($primary-color, 10%);
-      
+
       &::after {
         content: "Click to deselect";
         position: absolute;
@@ -439,7 +445,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
       }
     }
   }
-  
+
   &.special-card {
     width: 100px;
     height: 120px;
@@ -447,17 +453,17 @@ $text-disabled: rgba(255, 255, 255, 0.5);
     background-color: rgba($secondary-color, 0.1);
     flex-direction: column;
     padding: $spacing-sm;
-    
+
     &:hover {
       background-color: rgba($secondary-color, 0.2);
       box-shadow: 0 8px 16px rgba($secondary-color, 0.3);
     }
-    
+
     &.selected {
       background-color: $secondary-color;
       border-color: $secondary-color;
       box-shadow: 0 8px 16px rgba($secondary-color, 0.5);
-      
+
       &:hover {
         background-color: darken($secondary-color, 10%);
       }
@@ -468,7 +474,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
 .card-value {
   font-size: 28px;
   font-weight: bold;
-  
+
   &.special {
     font-size: 24px;
     margin-bottom: 4px;
@@ -484,12 +490,12 @@ $text-disabled: rgba(255, 255, 255, 0.5);
 
 .current-selection {
   text-align: center;
-  
+
   p {
     font-size: 18px;
     margin: 0;
   }
-  
+
   strong {
     color: $primary-color;
   }
@@ -502,7 +508,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   gap: 15px;
   max-width: 500px;
   margin: $spacing-xl auto 0;
-  
+
   h3 {
     text-align: center;
     margin-bottom: 15px;
@@ -541,7 +547,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   justify-content: center;
   flex: 1;
   min-height: 0;
-  
+
   @media (max-width: 1024px) {
     flex-direction: column;
     gap: 30px;
@@ -555,18 +561,18 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   @include flex-center;
   min-width: 0;
   flex: 1;
-  
+
   svg {
     width: min(60vh, 50vw, 600px);
     height: min(60vh, 50vw, 600px);
     max-width: 100%;
     max-height: 100%;
-    
+
     @media (max-width: 1024px) {
       width: min(50vh, 60vw, 500px);
       height: min(50vh, 60vw, 500px);
     }
-    
+
     @media (max-width: 768px) {
       width: min(40vh, 80vw, 400px);
       height: min(40vh, 80vw, 400px);
@@ -583,7 +589,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
 .chart-segment {
   transition: opacity 0.2s ease;
   cursor: pointer;
-  
+
   &:hover {
     opacity: 0.8;
   }
@@ -607,7 +613,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   @include card-base;
   transition: background-color 0.2s ease;
   font-size: 15px;
-  
+
   &:hover {
     background-color: $overlay-bg-hover;
   }
@@ -642,7 +648,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   padding: 15px $spacing-xl;
   @include card-base;
   border-left: 4px solid $primary-color;
-  
+
   &.admin-result {
     border-left-color: $gold-color;
     background-color: rgba($gold-color, 0.1);
@@ -662,7 +668,7 @@ $text-disabled: rgba(255, 255, 255, 0.5);
   font-weight: bold;
   min-width: 40px;
   text-align: center;
-  
+
   &.no-vote {
     background-color: $overlay-bg;
     color: $text-secondary;
@@ -685,30 +691,30 @@ $text-disabled: rgba(255, 255, 255, 0.5);
 
 .error-card {
   text-align: center;
-  
+
   mat-card-header {
     text-align: center;
     padding-bottom: $spacing-lg;
   }
-  
+
   mat-card-title {
     font-size: 1.5rem;
     margin-bottom: $spacing-sm;
   }
-  
+
   mat-card-subtitle {
     color: $text-secondary;
   }
-  
+
   mat-card-content {
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.8);
-    
+
     p {
       margin: $spacing-lg 0;
     }
   }
-  
+
   mat-card-actions {
     display: flex;
     gap: $spacing-lg;
@@ -732,16 +738,16 @@ $text-disabled: rgba(255, 255, 255, 0.5);
 .name-dialog {
   max-width: 400px;
   width: 90%;
-  
+
   mat-card {
     text-align: center;
   }
-  
+
   mat-card-actions {
     display: flex;
     justify-content: center;
   }
-  
+
   .full-width {
     width: 100%;
   }
@@ -753,41 +759,41 @@ $text-disabled: rgba(255, 255, 255, 0.5);
     flex-direction: column;
     height: auto;
   }
-  
+
   .users-sidebar {
     width: 100%;
     order: 2;
   }
-  
+
   .main-content {
     order: 1;
   }
-  
+
   .header-top {
     min-height: 50px; // Slightly smaller on mobile
     padding: 0 $spacing-md; // Add some padding on mobile
   }
-  
+
   .story-context-header {
     max-width: 100%;
   }
-  
+
   .story-inline {
     .story-label {
       display: none; // Hide label on mobile to save space
     }
   }
-  
+
   .card-deck {
     flex-wrap: wrap;
     justify-content: center;
   }
-  
+
   .story-card {
     width: 60px;
     height: 90px;
   }
-  
+
   .card-value {
     font-size: 20px;
   }
