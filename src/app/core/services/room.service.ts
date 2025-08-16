@@ -53,14 +53,14 @@ export class RoomService {
   private readonly baseUrl = 'https://storypointpoker-backend-production.up.railway.app/api';
   //private readonly baseUrl = 'http://localhost:3000/api';
   private socket: any;
-  
+
   // Reactive state management
   private usersSubject = new BehaviorSubject<User[]>([]);
   private roomSubject = new BehaviorSubject<Room | null>(null);
   private votingResultsSubject = new BehaviorSubject<VotingResults | null>(null);
   private estimationStartedSubject = new BehaviorSubject<boolean>(false);
   private resultsRevealedSubject = new BehaviorSubject<boolean>(false);
-  
+
   public users$ = this.usersSubject.asObservable();
   public room$ = this.roomSubject.asObservable();
   public votingResults$ = this.votingResultsSubject.asObservable();
@@ -116,7 +116,7 @@ export class RoomService {
           estimates[estimate] = (estimates[estimate] || 0) + 1;
         }
       });
-      
+
       const votingResults: VotingResults = {
         totalVotes: data.summary?.totalVotes || 0,
         estimates: estimates,
@@ -124,7 +124,7 @@ export class RoomService {
         mostCommonEstimate: data.summary?.mostCommon,
         revealed: data.revealed // Include revealed state
       };
-      
+
       this.votingResultsSubject.next(votingResults);
       this.usersSubject.next(data.votes); // votes array contains updated users with estimates
       this.resultsRevealedSubject.next(data.revealed);

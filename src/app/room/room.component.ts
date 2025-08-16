@@ -369,7 +369,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   isNumber(value: any): boolean {
-    return typeof value === 'number';
+    return !isNaN(Number(value)) && value !== null && value !== '';
   }
 
   isString(value: any): boolean {

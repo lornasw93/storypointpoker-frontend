@@ -13,11 +13,10 @@
             <div class="user-info">
               <span class="user-name">
                 {{ user.name }}
-                <span class="admin-badge" *ngIf="user.isAdmin">👑</span>
                 <span class="disconnected-badge" *ngIf="user.connected === false">🔌</span>
               </span>
               <div class="user-estimate-status">
-                <span class="user-estimate" *ngIf="(resultsRevealed || user.isAdmin) && user.hasVoted && user.estimate">
+                <span class="user-estimate" *ngIf="resultsRevealed">
                   <span *ngIf="isNumber(user.estimate)">{{ user.estimate }}</span>
                   <span *ngIf="user.estimate === 'info'">❓</span>
                   <span *ngIf="user.estimate === 'split'">✂️</span>
