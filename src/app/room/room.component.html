@@ -98,7 +98,7 @@
     <div class="voting-area">
       <div *ngIf="currentUser?.isAdmin" class="admin-view">
         <div *ngIf="!estimationStarted" class="waiting-state">
-          <h2>Ready to Start Planning Poker</h2>
+          <h2>Ready to start planning poker</h2>
           <p>Click "Start Estimating" when your team is ready to begin voting on the current story.</p>
         </div>
 
@@ -173,8 +173,8 @@
           <div class="current-selection" *ngIf="selectedEstimate">
             <p>Your estimate: <strong>
                 <span *ngIf="isNumber(selectedEstimate)">{{ selectedEstimate }}</span>
-                <span *ngIf="selectedEstimate === 'info'">❓ Need More Info</span>
-                <span *ngIf="selectedEstimate === 'split'">✂️ Story Too Big</span>
+                <span *ngIf="selectedEstimate === 'info'">❓ Need more info</span>
+                <span *ngIf="selectedEstimate === 'split'">✂️ Story too big</span>
               </strong></p>
           </div>
 

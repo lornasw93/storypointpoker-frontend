@@ -35,8 +35,6 @@ export interface Story {
 export interface VotingResults {
   totalVotes: number;
   estimates: { [key: string]: number };
-  averageEstimate?: number;
-  mostCommonEstimate?: string;
   revealed?: boolean;
 }
 
@@ -50,8 +48,8 @@ export interface ApiResponse<T = any> {
   providedIn: 'root'
 })
 export class RoomService {
-  private readonly baseUrl = 'https://storypointpoker-backend-production.up.railway.app/api';
-  //private readonly baseUrl = 'http://localhost:3000/api';
+  //private readonly baseUrl = 'https://storypointpoker-backend-production.up.railway.app/api';
+  private readonly baseUrl = 'http://localhost:3000/api';
   private socket: any;
 
   // Reactive state management
@@ -68,17 +66,17 @@ export class RoomService {
   public resultsRevealed$ = this.resultsRevealedSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    this.initializeSocket();
+    this.initialiseSocket();
   }
 
-  private initializeSocket(): void {
-    this.socket = io('https://storypointpoker-backend-production.up.railway.app', {
-      transports: ['websocket', 'polling']
-    });
-
-    // this.socket = io('http://localhost:3000', {
+  private initialiseSocket(): void {
+    // this.socket = io('https://storypointpoker-backend-production.up.railway.app', {
     //   transports: ['websocket', 'polling']
     // });
+
+    this.socket = io('http://localhost:3000', {
+      transports: ['websocket', 'polling']
+    });
 
     // Socket event listeners
     this.socket.on('room-state', (data: { room: Room; users: User[]; results: VotingResults }) => {
@@ -120,13 +118,11 @@ export class RoomService {
       const votingResults: VotingResults = {
         totalVotes: data.summary?.totalVotes || 0,
         estimates: estimates,
-        averageEstimate: undefined, // Can calculate later if needed
-        mostCommonEstimate: data.summary?.mostCommon,
-        revealed: data.revealed // Include revealed state
+        revealed: data.revealed
       };
 
       this.votingResultsSubject.next(votingResults);
-      this.usersSubject.next(data.votes); // votes array contains updated users with estimates
+      this.usersSubject.next(data.votes);
       this.resultsRevealedSubject.next(data.revealed);
     });
 

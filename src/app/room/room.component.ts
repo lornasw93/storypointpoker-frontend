@@ -33,8 +33,8 @@ export class RoomComponent implements OnInit, OnDestroy {
   users: User[] = [];
   storyPoints = [1, 3, 5, 8, 13];
   specialOptions = [
-    { value: 'info', label: '❓ Need More Info', shortLabel: '❓' },
-    { value: 'split', label: '✂️ Story Too Big', shortLabel: '✂️' }
+    { value: 'info', label: '❓ Need more info', shortLabel: '❓' },
+    { value: 'split', label: '✂️ Story too big', shortLabel: '✂️' }
   ];
   selectedEstimate: number | string | null = null;
   showNameDialog = false;
@@ -485,8 +485,8 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   private getEstimateLabel(estimate: string): string {
-    if (estimate === 'info') return '❓ Need More Info';
-    if (estimate === 'split') return '✂️ Story Too Big';
+    if (estimate === 'info') return '❓ Need more info';
+    if (estimate === 'split') return '✂️ Story too big';
     return estimate;
   }
 
