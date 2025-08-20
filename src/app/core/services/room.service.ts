@@ -71,11 +71,21 @@ export class RoomService {
 
   private initialiseSocket(): void {
     this.socket = io('https://storypointpoker-backend-production.up.railway.app', {
-      transports: ['websocket', 'polling']
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      timeout: 20000
     });
 
     // this.socket = io('http://localhost:3000', {
-    //   transports: ['websocket', 'polling']
+    //   transports: ['websocket', 'polling'],
+    //   reconnection: true,
+    //   reconnectionAttempts: 5,
+    //   reconnectionDelay: 1000,
+    //   reconnectionDelayMax: 5000,
+    //   timeout: 20000
     // });
 
     // Socket event listeners
@@ -126,11 +136,21 @@ export class RoomService {
       this.resultsRevealedSubject.next(data.revealed);
     });
 
-    this.socket.on('voting-reset', (data: { users: User[]; results: VotingResults }) => {
+    this.socket.on('voting-reset', (data: { users: User[]; results: VotingResults; estimationStarted: boolean; votingRevealed: boolean }) => {
+      // Update all users first
       this.usersSubject.next(data.users);
       this.votingResultsSubject.next(data.results);
       this.resultsRevealedSubject.next(false);
       this.estimationStartedSubject.next(false);
+
+      // Force reset all user votes in the local state
+      const currentUsers = this.usersSubject.value;
+      const updatedUsers = currentUsers.map(user => ({
+        ...user,
+        estimate: undefined,
+        hasVoted: false
+      }));
+      this.usersSubject.next(updatedUsers);
     });
 
     this.socket.on('estimation-started', (data: { users: User[]; results: VotingResults }) => {
