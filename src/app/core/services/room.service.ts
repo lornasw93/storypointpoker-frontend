@@ -94,6 +94,7 @@ export class RoomService {
       this.usersSubject.next(data.users);
       this.votingResultsSubject.next(data.results);
       this.resultsRevealedSubject.next(data.room.votingRevealed);
+      this.estimationStartedSubject.next(data.room.estimationStarted);
     });
 
     this.socket.on('user-joined', (data: { user: User; room: Room; users: User[] }) => {
