@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RoomService, User as BackendUser, Room as BackendRoom, VotingResults } from '../core/services/room.service';
 import Swal from 'sweetalert2';
+import * as confetti from 'canvas-confetti';
 
 interface User {
   id: string;
@@ -144,6 +145,8 @@ export class RoomComponent implements OnInit, OnDestroy {
 
           // Clear the selected estimate when results are revealed
           this.selectedEstimate = null;
+
+          this.showConfetti();
         }
       })
     );
@@ -488,6 +491,46 @@ export class RoomComponent implements OnInit, OnDestroy {
     if (estimate === 'info') return '❓ Need more info';
     if (estimate === 'split') return '✂️ Story too big';
     return estimate;
+  }
+
+  private showConfetti(): void {
+    const duration = 2000;
+    const leftConfetti = {
+      particleCount: 80,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0, y: 0.7 },
+      colors: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336']
+    };
+
+    const rightConfetti = {
+      particleCount: 80,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1, y: 0.7 },
+      colors: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336']
+    };
+
+    confetti({
+      ...leftConfetti,
+      zIndex: 1000,
+    });
+
+    confetti({
+      ...rightConfetti,
+      zIndex: 1000,
+    });
+
+    setTimeout(() => {
+      confetti({
+        particleCount: 50,
+        angle: 90,
+        spread: 70,
+        origin: { x: 0.5, y: 0.8 },
+        colors: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336'],
+        zIndex: 1000,
+      });
+    }, 250);
   }
 
   copyRoomUrl(): void {
