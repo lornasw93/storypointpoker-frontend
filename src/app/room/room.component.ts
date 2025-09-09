@@ -3,7 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RoomService, User as BackendUser, Room as BackendRoom, VotingResults } from '../core/services/room.service';
 import Swal from 'sweetalert2';
-import * as confetti from 'canvas-confetti';
+// @ts-ignore
+import confetti from 'canvas-confetti';
 
 interface User {
   id: string;
@@ -494,43 +495,54 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   private showConfetti(): void {
-    const duration = 2000;
-    const leftConfetti = {
+    const myCanvas = document.createElement('canvas');
+    myCanvas.style.position = 'fixed';
+    myCanvas.style.top = '0';
+    myCanvas.style.left = '0';
+    myCanvas.style.width = '100%';
+    myCanvas.style.height = '100%';
+    myCanvas.style.pointerEvents = 'none';
+    myCanvas.style.zIndex = '1000';
+    document.body.appendChild(myCanvas);
+
+    const myConfetti = confetti.create(myCanvas, {
+      resize: true,
+      useWorker: true
+    });
+
+    // Fire from the left
+    myConfetti({
       particleCount: 80,
       angle: 60,
       spread: 55,
       origin: { x: 0, y: 0.7 },
       colors: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336']
-    };
+    });
 
-    const rightConfetti = {
+    // Fire from the right
+    myConfetti({
       particleCount: 80,
       angle: 120,
       spread: 55,
       origin: { x: 1, y: 0.7 },
       colors: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336']
-    };
-
-    confetti({
-      ...leftConfetti,
-      zIndex: 1000,
     });
 
-    confetti({
-      ...rightConfetti,
-      zIndex: 1000,
-    });
-
+    // Center burst after a small delay
     setTimeout(() => {
-      confetti({
+      myConfetti({
         particleCount: 50,
         angle: 90,
         spread: 70,
         origin: { x: 0.5, y: 0.8 },
-        colors: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336'],
-        zIndex: 1000,
+        colors: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336']
       });
     }, 250);
+
+    // Clean up after animation
+    setTimeout(() => {
+      document.body.removeChild(myCanvas);
+    }, 3000);
   }
 
   copyRoomUrl(): void {

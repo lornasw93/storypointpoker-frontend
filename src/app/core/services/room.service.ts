@@ -94,7 +94,7 @@ export class RoomService {
       this.roomSubject.next(data.room);
       this.usersSubject.next(data.users);
       this.votingResultsSubject.next(data.results);
-      
+
       // Update estimation and voting states
       if (data.room.estimationStarted !== undefined) {
         this.estimationStartedSubject.next(data.room.estimationStarted);
