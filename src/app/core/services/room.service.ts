@@ -90,11 +90,18 @@ export class RoomService {
 
     // Socket event listeners
     this.socket.on('room-state', (data: { room: Room; users: User[]; results: VotingResults }) => {
+      // Update room state first
       this.roomSubject.next(data.room);
       this.usersSubject.next(data.users);
       this.votingResultsSubject.next(data.results);
-      this.resultsRevealedSubject.next(data.room.votingRevealed);
-      this.estimationStartedSubject.next(data.room.estimationStarted);
+      
+      // Update estimation and voting states
+      if (data.room.estimationStarted !== undefined) {
+        this.estimationStartedSubject.next(data.room.estimationStarted);
+      }
+      if (data.room.votingRevealed !== undefined) {
+        this.resultsRevealedSubject.next(data.room.votingRevealed);
+      }
     });
 
     this.socket.on('user-joined', (data: { user: User; room: Room; users: User[] }) => {
