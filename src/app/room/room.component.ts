@@ -12,7 +12,6 @@ interface User {
   estimate?: number | string;
   hasVoted: boolean;
   isAdmin?: boolean;
-  connected?: boolean;
 }
 
 interface ChartSegment {
@@ -400,12 +399,13 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   get allUsersVoted(): boolean {
-    const votingUsers = this.users.filter(user => !user.isAdmin && user.connected !== false);
-    return votingUsers.length > 0 && votingUsers.every(user => user.hasVoted);
+    // Check if at least one non-admin user has voted
+    const votingUsers = this.users.filter(user => !user.isAdmin);
+    return votingUsers.some(user => user.hasVoted);
   }
 
   get votingProgress(): string {
-    const votingUsers = this.users.filter(user => !user.isAdmin && user.connected !== false);
+    const votingUsers = this.users.filter(user => !user.isAdmin);
     const votedCount = votingUsers.filter(user => user.hasVoted).length;
     return `${votedCount}/${votingUsers.length}`;
   }

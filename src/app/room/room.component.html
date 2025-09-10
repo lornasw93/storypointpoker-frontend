@@ -6,12 +6,10 @@
       </mat-card-header>
       <mat-card-content>
         <div class="user-list">
-          <div class="user-item" *ngFor="let user of users" [hidden]="user.isAdmin"
-            [class.disconnected]="user.connected === false">
+          <div class="user-item" *ngFor="let user of users" [hidden]="user.isAdmin">
             <div class="user-info">
               <span class="user-name">
                 {{ user.name }}
-                <span class="disconnected-badge" *ngIf="user.connected === false">🔌</span>
               </span>
               <div class="user-estimate-status">
                 <span class="user-estimate" *ngIf="resultsRevealed">
@@ -19,10 +17,8 @@
                   <span *ngIf="user.estimate === 'info'">❓</span>
                   <span *ngIf="user.estimate === 'split'">✂️</span>
                 </span>
-                <span class="user-status" [class.voted]="user.hasVoted" [class.not-voted]="!user.hasVoted"
-                  [class.disconnected]="user.connected === false">
-                  <span *ngIf="user.connected === false">🔌</span>
-                  <span *ngIf="user.connected !== false">{{ user.hasVoted ? '✓' : '⏳' }}</span>
+                <span class="user-status" [class.voted]="user.hasVoted" [class.not-voted]="!user.hasVoted">
+                  <span>{{ user.hasVoted ? '✓' : '⏳' }}</span>
                 </span>
               </div>
             </div>
@@ -79,7 +75,7 @@
 
             <button mat-raised-button color="primary" (click)="revealResults()"
               *ngIf="estimationStarted && !resultsRevealed" [disabled]="!allUsersVoted">
-              �️ View Results ({{ votingProgress }})
+              👀 View Results ({{ votingProgress }})
             </button>
 
             <button mat-raised-button color="primary" (click)="resetAndStartEstimation()"
