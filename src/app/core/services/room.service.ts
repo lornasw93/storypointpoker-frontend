@@ -70,7 +70,9 @@ export class RoomService {
   }
 
   private initialiseSocket(): void {
-    this.socket = io('https://storypointpoker-backend-production.up.railway.app', {
+    //https://storypointpoker-backend.onrender.com
+    this.socket = io('https://storypointpoker-backend.onrender.com', {
+    //this.socket = io('https://storypointpoker-backend-production.up.railway.app', {
       transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionAttempts: 5,
